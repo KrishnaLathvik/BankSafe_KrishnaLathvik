@@ -8,7 +8,7 @@ import com.edutech.progressive.dao.AccountDAO;
 import com.edutech.progressive.entity.Accounts;
 import com.edutech.progressive.service.AccountService;
  
-public class AccountServiceImpl  implements AccountService{
+public class AccountServiceImpl implements AccountService{
     private AccountDAO accountDAO;
  
     public AccountServiceImpl(AccountDAO accountDAO) {
