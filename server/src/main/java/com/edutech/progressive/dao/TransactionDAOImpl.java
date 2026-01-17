@@ -1,0 +1,37 @@
+package com.edutech.progressive.dao;
+ 
+import java.util.ArrayList;
+import java.util.List;
+ 
+import com.edutech.progressive.entity.Transactions;
+ 
+public class TransactionDAOImpl implements TransactionDAO{
+    private List<Transactions> transactionList;
+ 
+    public TransactionDAOImpl() {
+        this.transactionList = new ArrayList<>();
+    }
+ 
+    @Override
+    public int addTransaction(Transactions transaction) {
+        return -1;
+    }
+ 
+    @Override
+    public Transactions getTransactionById(int transactionId) {
+        return null;
+    }
+ 
+    @Override
+    public void updateTransaction(Transactions transaction) {
+    }
+ 
+    @Override
+    public void deleteTransaction(int transactionId) {
+    }
+ 
+    @Override
+    public List<Transactions> getAllTransactions() {
+        return transactionList;
+    }
+}
