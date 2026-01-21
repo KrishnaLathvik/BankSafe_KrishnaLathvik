@@ -3,14 +3,14 @@ package com.edutech.progressive.entity;
 import javax.persistence.*;
 import java.util.Date;
 
-//@Entity
+@Entity
 public class Transactions {
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int transactionId;
-    // @ManyToOne
-    // @JoinColumn(name = "accountId")
+    //@ManyToOne
+    //@JoinColumn(name = "accountId")
     private int accountId;;
     private double amount;
     private String transactionType;

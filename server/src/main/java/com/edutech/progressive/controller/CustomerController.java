@@ -14,75 +14,83 @@
     @RestController
     @RequestMapping("/customers")
     public class CustomerController {
-
         @Autowired
         private CustomerServiceImplJpa customerServiceJpa;
-
         @Autowired
         private CustomerServiceImplArraylist customerServiceArraylist;
 
+        
+        // @Autowired
+        // public CustomerController(CustomerServiceImplJpa customerServiceJpa,
+        //         CustomerServiceImplArraylist customerServiceArraylist) {
+        //     this.customerServiceJpa = customerServiceJpa;
+        //     this.customerServiceArraylist = customerServiceArraylist;
+        // }
+
         @GetMapping
         public ResponseEntity<List<Customers>> getAllCustomers() {
-            // try {
-            //     List<Customers> customers = customerServiceJpa.getAllCustomers();
-            //     return new ResponseEntity<>(customers, HttpStatus.OK);
-            // } catch (SQLException e) {
-            //     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            // }
-            return null;
+            try {
+                List<Customers> customers = customerServiceJpa.getAllCustomers();
+                return new ResponseEntity<>(customers, HttpStatus.OK);
+            } catch (SQLException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            // return null;
         }
 
         @GetMapping("/{customerId}")
         public ResponseEntity<Customers> getCustomerById(@PathVariable int customerId) {
-            // try {
-            //     Customers customers = customerServiceJpa.getCustomerById(customerId);
-            //     if (customers != null) {
-            //         return new ResponseEntity<>(customers, HttpStatus.OK);
-            //     } else {
-            //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            //     }
-            // } catch (SQLException e) {
-            //     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            // }
-            return null;
+            try {
+                Customers customers = customerServiceJpa.getCustomerById(customerId);
+                if (customers != null) {
+                    return new ResponseEntity<>(customers, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            } catch (SQLException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            // return null;
         }
 
         @PostMapping
-        public ResponseEntity<?> addCustomer(@RequestBody Customers customers) {
-            // try {
-            //     int customerId = customerServiceJpa.addCustomer(customers);
-            //     return new ResponseEntity<>(customerId, HttpStatus.CREATED);
-            // } catch (CustomerAlreadyExistsException e) {
-            //     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-            // } catch (SQLException e) {
+        public ResponseEntity<Integer> addCustomer(@RequestBody Customers customers) {
+            try {
+                int customerId = customerServiceJpa.addCustomer(customers);
+                return new ResponseEntity<>(customerId, HttpStatus.CREATED);
+            } catch (SQLException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            //  catch (SQLException e) {
             //     return new ResponseEntity<>("Unable to process your request at the moment", HttpStatus.INTERNAL_SERVER_ERROR);
             // }
-            return null;
+            //return null;
         }
 
         @PutMapping("/{customerId}")
         public ResponseEntity<?> updateCustomer(@PathVariable int customerId, @RequestBody Customers customers) {
-            // try {
-            //     customers.setCustomerId(customerId);
-            //     customerServiceJpa.updateCustomer(customers);
-            //     return new ResponseEntity<>(HttpStatus.OK);
-            // } catch (CustomerAlreadyExistsException e) {
-            //     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-            // } catch (SQLException e) {
+            try {
+                customers.setCustomerId(customerId);
+                customerServiceJpa.updateCustomer(customers);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (SQLException e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            } 
+            // catch (SQLException e) {
             //     return new ResponseEntity<>("Unable to process your request at the moment", HttpStatus.INTERNAL_SERVER_ERROR);
             // }
-            return null;
+            
         }
 
         @DeleteMapping("/{customerId}")
         public ResponseEntity<Void> deleteCustomer(@PathVariable int customerId) {
-            // try {
-            //     customerServiceJpa.deleteCustomer(customerId);
-            //     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            // } catch (SQLException e) {
-            //     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            // }
-            return null;
+            try {
+                customerServiceJpa.deleteCustomer(customerId);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } catch (SQLException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            
         }
 
         @GetMapping("/fromArrayList")

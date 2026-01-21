@@ -2,15 +2,15 @@ package com.edutech.progressive.entity;
 
 import javax.persistence.*;
 
-//@Entity
+@Entity
 public class Accounts implements Comparable<Accounts> {
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountId;
-    // @ManyToOne
-    // @JoinColumn(name = "customerId") // name refers to the column name in the
-    // Accounts table
+    //@ManyToOne
+    //@JoinColumn(name = "customerId") // name refers to the column name in the
+    //Accounts table
     private int customerId;
 
     private double balance;
