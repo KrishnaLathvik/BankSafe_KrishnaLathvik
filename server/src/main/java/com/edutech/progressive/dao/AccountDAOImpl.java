@@ -1,14 +1,17 @@
 package com.edutech.progressive.dao;
-import com.edutech.progressive.config.DatabaseConnectionManager;
-import com.edutech.progressive.entity.Accounts;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.edutech.progressive.config.DatabaseConnectionManager;
+import com.edutech.progressive.entity.Accounts;
 public class AccountDAOImpl implements AccountDAO {
+
     private List<Accounts> accountsList = new ArrayList<Accounts>();
 
     @Override
@@ -33,7 +36,7 @@ public class AccountDAOImpl implements AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e; 
         } finally {
             if (connection != null) {
                 connection.close();
@@ -52,10 +55,8 @@ public class AccountDAOImpl implements AccountDAO {
 
         try {
             connection = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM accounts where customer_id = ?";
-
+            String sql = "SELECT * FROM accounts where customer_id = '"+customer_id+"'";
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, customer_id);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -67,7 +68,7 @@ public class AccountDAOImpl implements AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e; 
         } finally {
             if (connection != null) {
                 connection.close();
@@ -97,9 +98,8 @@ public class AccountDAOImpl implements AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e; 
         } finally {
-            // Close resources in the reverse order of opening
             if (connection != null) {
                 connection.close();
             }
@@ -117,10 +117,9 @@ public class AccountDAOImpl implements AccountDAO {
             connection = DatabaseConnectionManager.getConnection();
             String sql = "INSERT INTO accounts (customer_id, balance) VALUES (?, ?)";
             statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, accounts.getCustomerId());
+            statement.setInt(1, accounts.getCustomer().getCustomerId());
             statement.setDouble(2, accounts.getBalance());
             statement.executeUpdate();
-
 
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -129,7 +128,7 @@ public class AccountDAOImpl implements AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e;
         } finally {
             if (connection != null) {
                 connection.close();
@@ -149,13 +148,13 @@ public class AccountDAOImpl implements AccountDAO {
             connection = DatabaseConnectionManager.getConnection();
             String sql = "UPDATE accounts SET customer_id = ?, balance = ? WHERE account_id = ?";
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, accounts.getCustomerId());
+            statement.setInt(1, accounts.getCustomer().getCustomerId());
             statement.setDouble(2, accounts.getBalance());
             statement.setInt(3, accounts.getAccountId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e;
         } finally {
             if (connection != null) {
                 connection.close();
@@ -176,7 +175,7 @@ public class AccountDAOImpl implements AccountDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e; 
         } finally {
             if (connection != null) {
                 connection.close();

@@ -1,10 +1,17 @@
 package com.edutech.progressive.dao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.edutech.progressive.config.DatabaseConnectionManager;
 import com.edutech.progressive.entity.Transactions;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class TransactionDAOImpl implements TransactionDAO{
 
@@ -25,14 +32,13 @@ public class TransactionDAOImpl implements TransactionDAO{
                 int transactionId = resultSet.getInt("transaction_id");
                 int accountId = resultSet.getInt("account_id");
                 double amount = resultSet.getDouble("amount");
-                Date transactionDate = resultSet.getTimestamp("transaction_date");
+                Date transactionDate = resultSet.getDate("transaction_date");
                 String transactionType = resultSet.getString("transaction_type");
 
                 transactions.add(new Transactions(transactionId, accountId,amount, transactionDate, transactionType));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
         } finally {
             if (connection != null) {
                 connection.close();
@@ -58,13 +64,13 @@ public class TransactionDAOImpl implements TransactionDAO{
             if (resultSet.next()) {
                 int accountId = resultSet.getInt("account_id");
                 double amount = resultSet.getDouble("amount");
-                Date transactionDate = resultSet.getTimestamp("transaction_date");
+                Date transactionDate = resultSet.getDate("transaction_date");
                 String transactionType = resultSet.getString("transaction_type");
                 return new Transactions(transactionId, accountId, amount, transactionDate,transactionType);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e;
         } finally {
             if (connection != null) {
                 connection.close();
@@ -83,7 +89,7 @@ public class TransactionDAOImpl implements TransactionDAO{
             connection = DatabaseConnectionManager.getConnection();
             String sql = "INSERT INTO transactions (account_id, amount, transaction_date, transaction_type) VALUES (?, ?, ?, ?)";
             statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, transaction.getAccountId());
+            statement.setInt(1, transaction.getAccounts().getAccountId());
             statement.setDouble(2, transaction.getAmount());
             statement.setTimestamp(3, new Timestamp(transaction.getTransactionDate().getTime()));
             statement.setString(4, transaction.getTransactionType());
@@ -96,9 +102,8 @@ public class TransactionDAOImpl implements TransactionDAO{
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e; 
         } finally {
-            // Close resources in the reverse order of opening
             if (statement != null) {
                 statement.close();
             }
@@ -118,7 +123,7 @@ public class TransactionDAOImpl implements TransactionDAO{
             connection = DatabaseConnectionManager.getConnection();
             String sql = "UPDATE transactions SET account_id = ?, amount = ?, transaction_date = ?, transaction_type =? WHERE transaction_id = ?";
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, transaction.getAccountId());
+            statement.setInt(1, transaction.getAccounts().getAccountId());
             statement.setDouble(2, transaction.getAmount());
             statement.setTimestamp(3, new Timestamp(transaction.getTransactionDate().getTime()));
             statement.setString(4, transaction.getTransactionType());
@@ -126,7 +131,7 @@ public class TransactionDAOImpl implements TransactionDAO{
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e;
         } finally {
             if (connection != null) {
                 connection.close();
@@ -147,7 +152,7 @@ public class TransactionDAOImpl implements TransactionDAO{
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow the exception
+            throw e; 
         } finally {
             if (connection != null) {
                 connection.close();
