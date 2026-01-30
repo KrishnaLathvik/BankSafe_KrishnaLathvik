@@ -18,15 +18,15 @@ import java.util.List;
 public class CustomerServiceImplJpa implements CustomerService {
 
     // PasswordEncoder passwordEncoder;
-    // TransactionRepository transactionRepository;
-    // AccountRepository accountRepository;
+    TransactionRepository transactionRepository;
+    AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerServiceImplJpa( CustomerRepository customerRepository) {
+    public CustomerServiceImplJpa(TransactionRepository transactionRepository,  AccountRepository accountRepository, CustomerRepository customerRepository) {
         // this.passwordEncoder = passwordEncoder;
-        // this.transactionRepository = transactionRepository;
-        // this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
+        this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
     }
 
@@ -44,21 +44,21 @@ public class CustomerServiceImplJpa implements CustomerService {
 
     @Override
     public int addCustomer(Customers customers) throws SQLException {
-        // Customers existingCustomer = customerRepository.findByEmail(customers.getEmail());
-        // if (existingCustomer != null) {
-        //     throw new CustomerAlreadyExistsException(
-        //             "Customer with give email already exists : " + customers.getEmail());
-        // }
-        // Customers oldUser = customerRepository.findByUsername(customers.getUsername());
-        // if (oldUser != null) {
-        //     throw new CustomerAlreadyExistsException(
-        //             "Customer with give username already exists : " + customers.getUsername());
-        // }
-        // customers.setPassword(passwordEncoder.encode(customers.getPassword()));
-        // return customerRepository.save(customers).getCustomerId();
-
-        // return -1;
+        Customers existingCustomer = customerRepository.findByEmail(customers.getEmail());
+        if (existingCustomer != null) {
+            throw new CustomerAlreadyExistsException(
+                    "Customer with give email already exists : " + customers.getEmail());
+        }
+        Customers oldUser = customerRepository.findByUsername(customers.getUsername());
+        if (oldUser != null) {
+            throw new CustomerAlreadyExistsException(
+                    "Customer with give username already exists : " + customers.getUsername());
+        }
+        //customers.setPassword(passwordEncoder.encode(customers.getPassword()));
         return customerRepository.save(customers).getCustomerId();
+
+        
+        //return customerRepository.save(customers).getCustomerId();
     }
 
     @Override
@@ -89,8 +89,8 @@ public class CustomerServiceImplJpa implements CustomerService {
     @Override
     @Transactional
     public void deleteCustomer(int customerId) throws SQLException {
-        // transactionRepository.deleteByCustomerId(customerId);
-        // accountRepository.deleteByCustomerId(customerId);
+        transactionRepository.deleteByCustomerId(customerId);
+        accountRepository.deleteByCustomerId(customerId);
         customerRepository.deleteByCustomerId(customerId);
     }
 
